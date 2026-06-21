@@ -71,3 +71,7 @@ Assets/ASET/data/random_*.json.meta
 *.wav
 *.m4a
 *.mp3
+# Allow restricted thesis study videos in this folder
+!Study_Materials/
+!Study_Materials/**/
+!Study_Materials/Videos/*.mp4
