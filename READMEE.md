@@ -139,7 +139,8 @@ The formal thesis workflow follows these principles:
 - No raw camera video is stored for formal evaluation.
 - No per-frame hand landmark trajectories are exported for formal analysis.
 - Exported outputs are limited to anonymised task-level and session-level summaries.
-- Participant consent forms, interview recordings, formal study data, and identifiable material are excluded from this repository.
+- Participant consent forms, exported formal logs, and identifiable administrative material are excluded from this repository.
+- Restricted experiment and interview videos are stored separately under `Study_Materials/Videos/` in this private repository for thesis supervision and examination only.
 
 Examples of task-level outputs include:
 
@@ -242,6 +243,18 @@ For the main thesis workflow, use the following sequence:
 
 The main formal evaluation focuses on Practice. Assessment and Daily are supplementary modules, while Story is a lightweight extension and is not part of the main fixed-versus-adaptive comparison.
 
+### 5.1 Restricted study videos
+
+Restricted study recordings are available in:
+
+```text
+Study_Materials/Videos/
+```
+
+This folder contains pseudonymised experiment recordings and post-task interview videos associated with the thesis evaluation. The materials are included only for supervision and examination in this private repository.
+
+Files use participant-style identifiers such as `Person1`, `Person2`, and `Person3`. They must not be redistributed, made public, or used outside the thesis review context.
+
 ### 6. Build for iPad
 
 1. In Unity, open **File → Build Settings**.
@@ -272,6 +285,11 @@ Assets/
 ├── MediaPipeUnity/
 ├── CardModeScene.unity
 └── other Unity assets
+
+Study_Materials/
+└── Videos/
+    ├── experiment recordings
+    └── post-task interview recordings
 
 Packages/
 ├── manifest.json
@@ -392,19 +410,32 @@ The Practice module is the primary module used for the formal fixed-versus-adapt
 
 ---
 
-## Repository Exclusions
+## Restricted Study Materials and Repository Exclusions
+
+### Restricted materials included in this private repository
+
+The following thesis review materials are stored under:
+
+```text
+Study_Materials/Videos/
+```
+
+- Experiment recordings
+- Post-task interview recordings
+
+These files are restricted to thesis supervision and examination. They must not be redistributed or made publicly available.
+
+### Materials intentionally excluded
 
 The repository intentionally excludes:
 
-- Participant CSV data
-- Exported formal logs
-- Interview audio or video
-- Consent forms
-- Raw camera recordings
+- Participant CSV data and exported formal logs
+- Consent forms and participant contact details
+- Raw camera recordings outside the selected thesis-review videos
 - Build folders
 - Unity cache folders
 - Local crash logs
-- Private study material
+- Other private administrative study material
 
 ---
 
