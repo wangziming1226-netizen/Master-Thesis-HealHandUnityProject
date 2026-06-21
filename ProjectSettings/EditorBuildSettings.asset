@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Thesis/Scenes/ThesisHub.unity
+    guid: f5fbeaf284bd54d5480bbca071991554
+  - enabled: 1
     path: Assets/ASET/_MyGameScenes/main.unity
     guid: e0d24499a69a0e0478990ad725a61b49
   - enabled: 1
@@ -17,6 +20,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ASET/_MyGameScenes/RandomModeScene.unity
     guid: 7ecd3abd445f44197b8ff498c5de4d88
+  - enabled: 1
+    path: Assets/Thesis/Scenes/Practice.unity
+    guid: e61dc6f7a8a8d4be4b2240e6efcf1d7a
+  - enabled: 1
+    path: Assets/Thesis/Scenes/Daily.unity
+    guid: d372d7727fddd4956b8e9c18b3084534
+  - enabled: 1
+    path: Assets/Thesis/Scenes/Story.unity
+    guid: 75c36428efc4d4b60ab6ec7a9a8f6de7
+  - enabled: 1
+    path: Assets/Thesis/Scenes/Assessment.unity
+    guid: 8871af658e2324cb1adbe86f4f81434e
+  - enabled: 1
+    path: Assets/Thesis/Scenes/Tracking.unity
+    guid: 821e24628542e4cc1b0d4ee21b2dae61
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

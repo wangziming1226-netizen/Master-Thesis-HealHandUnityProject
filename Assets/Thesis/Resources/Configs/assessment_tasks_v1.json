@@ -1,0 +1,8 @@
+{
+  "version": "assessment_v1",
+  "tasks": [
+    { "gesture_type": "pinch",     "hold_time": 1.5, "tolerance": 0.10, "rhythm_speed": 1.0, "sequence_len": 1, "hint_intensity": 1 },
+    { "gesture_type": "open_hand", "hold_time": 1.7, "tolerance": 0.12, "rhythm_speed": 1.0, "sequence_len": 1, "hint_intensity": 1 },
+    { "gesture_type": "fist",      "hold_time": 1.9, "tolerance": 0.14, "rhythm_speed": 1.0, "sequence_len": 1, "hint_intensity": 1 }
+  ]
+}

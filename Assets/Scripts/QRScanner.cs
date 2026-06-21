@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,39 +8,60 @@ using TMPro;
 using ZXing;
 using ZXing.Common;
 
+#if UNITY_ENGINE
+#endif
+
 [DisallowMultipleComponent]
 public class QRScanner : MonoBehaviour
 {
     [Header("UI")]
-    public RawImage preview;          // 建议直接拖 Annotatable Screen 的 RawImage
+    public RawImage preview;
     public AspectRatioFitter fitter;
     public TMP_Text statusText;
 
     [Header("Scan")]
     [Range(0.1f, 1f)] public float scanInterval = 0.3f;
     public bool openUrlIfLink = true;
+
+    [Tooltip("Keep this as a backup. The scanner can still restart when the user taps/clicks.")]
     public bool autoRestartOnTap = true;
+
+    [Tooltip("Automatically restart scanning after a valid QR code is decoded.")]
+    public bool autoRestartAfterDecode = true;
+
+    [Tooltip("Delay before the scanner becomes ready for the next QR code.")]
+    public float autoRestartDelay = 0.8f;
+
+    [Tooltip("If true, the same QR payload will not be accepted again until the card disappears from camera view.")]
+    public bool requireClearBeforeSameCode = true;
+
     public AudioClip beep;
 
     [Header("Events")]
     public UnityEvent<string> onDecoded;
 
-    [Header("Camera Source (from Mediapipe)")]
-    [Tooltip("拖 Annotatable Screen 上的 CameraTextureTap")]
-    public CameraTextureTap cameraTap;    // ✅ 不再自己开 WebCam，只从这里拿纹理
+    [Header("Camera Source (optional)")]
+    [Tooltip("如果有 CameraTextureTap 就拖；没有就会退回用 preview.texture")]
+    public CameraTextureTap cameraTap;
 
     BarcodeReaderGeneric reader;
-    bool  scanning = true;
+    bool scanning = true;
     float nextScan;
 
-    // CPU 侧中转纹理（用于把 RenderTexture / 外部纹理拷到可读 Texture2D）
     Texture2D scratchTex;
-    byte[]    rgbaBuffer;
+    byte[] rgbaBuffer;
+
+    // New state variables to prevent duplicate scans of the same visible card
+    string lastAcceptedPayload = "";
+    bool waitingForCardToClear = false;
+    Coroutine restartCoroutine;
 
     [Serializable]
     public class CardConfig
     {
-        public string card_id, gesture, difficulty;
+        public string card_id;
+        public string gesture;
+        public string difficulty;
         public float hold_secs;
     }
 
@@ -47,7 +69,6 @@ public class QRScanner : MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        // 没拖的话，尝试自动找一个
         if (!cameraTap)
             cameraTap = FindFirstObjectByType<CameraTextureTap>(FindObjectsInactive.Include);
 
@@ -55,7 +76,7 @@ public class QRScanner : MonoBehaviour
         {
             Options = new DecodingOptions
             {
-                TryHarder   = true,
+                TryHarder = true,
                 TryInverted = true,
                 PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE }
             }
@@ -69,21 +90,26 @@ public class QRScanner : MonoBehaviour
 
     void Update()
     {
-        // 还没找到视频源：尝试再找一次，然后直接返回
+        Texture src = null;
+
+        // 1) 优先走 CameraTextureTap（兼容旧 card 环境）
         if (!cameraTap)
-        {
             cameraTap = FindFirstObjectByType<CameraTextureTap>(FindObjectsInactive.Include);
-            if (!cameraTap)
-            {
-                if (statusText) statusText.text = "Waiting for camera…";
-                return;
-            }
+
+        if (cameraTap != null)
+            src = cameraTap.CurrentTexture;
+
+        // 2) 没有 CameraTextureTap 就退回用 preview.texture（兼容 thesis 透明承载层）
+        if (src == null && preview != null)
+            src = preview.texture;
+
+        if (src == null)
+        {
+            if (statusText) statusText.text = "Waiting for camera…";
+            return;
         }
 
-        Texture src = cameraTap.CurrentTexture;
-        if (!src) return;
-
-        // UI 适配比例（Mediapipe 那边已经处理好旋转/镜像了，这里只管宽高比）
+        // UI 比例
         if (fitter)
         {
             float w = src.width;
@@ -92,11 +118,10 @@ public class QRScanner : MonoBehaviour
                 fitter.aspectRatio = w / h;
         }
 
-        // 点击重启下一次扫码
+        // Keep tap restart as backup
         if (autoRestartOnTap && Input.GetMouseButtonDown(0))
             RestartScan();
 
-        // 按固定时间间隔做一次解码
         if (scanning && Time.time >= nextScan)
         {
             nextScan = Time.time + scanInterval;
@@ -104,7 +129,6 @@ public class QRScanner : MonoBehaviour
         }
     }
 
-    // 从任意 Texture（Texture2D / RenderTexture / WebCamTexture）解码 QR
     void TryDecodeFromTexture(Texture src)
     {
         if (!src) return;
@@ -113,19 +137,16 @@ public class QRScanner : MonoBehaviour
         int h = src.height;
         if (w <= 0 || h <= 0) return;
 
-        // 1) 先把源纹理拷成 CPU 可读的 RGBA32 Texture2D
         Texture2D cpuTex = EnsureScratchTexture(w, h);
 
         if (src is Texture2D tex2D)
         {
-            // 源本身就是 Texture2D，直接拷贝像素
             var pixels = tex2D.GetPixels32();
             cpuTex.SetPixels32(pixels);
             cpuTex.Apply(false);
         }
         else if (src is RenderTexture rt)
         {
-            // 源是 RenderTexture：从 GPU 拷一帧下来
             RenderTexture current = RenderTexture.active;
             RenderTexture.active = rt;
             cpuTex.ReadPixels(new Rect(0, 0, w, h), 0, 0, false);
@@ -134,20 +155,22 @@ public class QRScanner : MonoBehaviour
         }
         else if (src is WebCamTexture wct)
         {
-            // 理论上不会再走到这里，但以防万一
             var pixels = wct.GetPixels32();
             cpuTex.SetPixels32(pixels);
             cpuTex.Apply(false);
         }
         else
         {
-            // 其它类型先不支持
+            if (statusText) statusText.text = $"Unsupported texture type: {src.GetType().Name}";
             return;
         }
 
-        // 2) 把 Texture2D 的像素转成 ZXing 需要的 RGBA byte[]
         var colors = cpuTex.GetPixels32();
-        if (colors == null || colors.Length == 0) return;
+        if (colors == null || colors.Length == 0)
+        {
+            if (statusText) statusText.text = "Empty pixel buffer";
+            return;
+        }
 
         int need = colors.Length * 4;
         if (rgbaBuffer == null || rgbaBuffer.Length != need)
@@ -169,28 +192,90 @@ public class QRScanner : MonoBehaviour
             RGBLuminanceSource.BitmapFormat.RGBA32
         );
 
-        if (result == null) return;
+        if (result == null)
+        {
+            // Important:
+            // If no QR is visible, we allow the same card to be accepted again later.
+            // This prevents repeated triggering while the same card remains in view,
+            // but still allows reuse after the card has been moved away.
+            if (waitingForCardToClear)
+            {
+                waitingForCardToClear = false;
+                lastAcceptedPayload = "";
+                Debug.Log("[QRScanner] Card cleared. Scanner is ready for the next QR code.");
+            }
 
-        // ✅ 扫码成功
+            if (statusText) statusText.text = $"No QR decoded ({w}x{h})";
+            return;
+        }
+
+        string txt = result.Text ?? string.Empty;
+        Debug.Log($"[QRScanner] format={result.BarcodeFormat}, text=<{txt}>, len={txt.Length}, size={w}x{h}");
+
+        // 空内容一律视为无效，不触发成功逻辑
+        if (string.IsNullOrWhiteSpace(txt))
+        {
+            if (statusText) statusText.text = $"QR detected but payload empty ({result.BarcodeFormat})";
+            return;
+        }
+
+        // 只接受像 thesis 卡片 JSON 的内容，避免误报
+        string trimmed = txt.TrimStart();
+        if (!(trimmed.StartsWith("{") && txt.Contains("gesture")))
+        {
+            if (statusText) statusText.text = "Decoded non-card content";
+            Debug.Log($"[QRScanner] Rejected payload=<{txt}>");
+            return;
+        }
+
+        // Prevent immediately accepting the same still-visible QR code again
+        if (requireClearBeforeSameCode && waitingForCardToClear && txt == lastAcceptedPayload)
+        {
+            if (statusText) statusText.text = "Same card still visible. Move to the next QR card.";
+            return;
+        }
+
+        AcceptDecodedPayload(txt);
+    }
+
+    void AcceptDecodedPayload(string txt)
+    {
         scanning = false;
+        lastAcceptedPayload = txt;
+        waitingForCardToClear = true;
 
         if (beep) AudioSource.PlayClipAtPoint(beep, Vector3.zero, 0.6f);
         Handheld.Vibrate();
 
-        string txt = result.Text ?? string.Empty;
-
-        // 把原始字符串发给后续逻辑（例如 QRToGestureLinker）
         onDecoded?.Invoke(txt);
-
-        // 在 UI 上显示一条简短提示
         ShowDecodedSummary(txt);
 
-        // 如果是链接，按设置打开浏览器
         if (openUrlIfLink && Uri.IsWellFormedUriString(txt, UriKind.Absolute))
         {
             Application.OpenURL(txt);
-            return;
         }
+
+        if (autoRestartAfterDecode)
+        {
+            if (restartCoroutine != null)
+                StopCoroutine(restartCoroutine);
+
+            restartCoroutine = StartCoroutine(AutoRestartScanDelayed());
+        }
+    }
+
+    IEnumerator AutoRestartScanDelayed()
+    {
+        yield return new WaitForSeconds(autoRestartDelay);
+
+        scanning = true;
+        nextScan = Time.time + 0.1f;
+
+        if (statusText)
+            statusText.text = "Scan the next card";
+
+        Debug.Log("[QRScanner] Auto restart enabled. Ready for next QR card.");
+        restartCoroutine = null;
     }
 
     Texture2D EnsureScratchTexture(int w, int h)
@@ -207,14 +292,10 @@ public class QRScanner : MonoBehaviour
         return scratchTex;
     }
 
-    /// <summary>
-    /// 把扫码结果转成 1–2 行的英文提示；优先解析我们自己的卡片 JSON。
-    /// </summary>
     void ShowDecodedSummary(string txt)
     {
         if (!statusText) return;
 
-        // 先尝试按我们的卡片 JSON 解析
         try
         {
             var cfg = JsonUtility.FromJson<CardConfig>(txt);
@@ -227,10 +308,9 @@ public class QRScanner : MonoBehaviour
         }
         catch
         {
-            // 不是我们格式的 JSON，就当普通字符串处理
+            // ignore
         }
 
-        // 再看看是不是 URL
         if (Uri.IsWellFormedUriString(txt, UriKind.Absolute))
         {
             statusText.text = "Opening link…";
@@ -244,13 +324,43 @@ public class QRScanner : MonoBehaviour
     public void RestartScan()
     {
         scanning = true;
-        if (statusText) statusText.text = "Scan the next card";
+        nextScan = Time.time + 0.1f;
+
+        if (statusText)
+            statusText.text = "Scan the next card";
+
+        Debug.Log("[QRScanner] Manual restart scan.");
+    }
+
+    public void ForceResetScanner()
+    {
+        scanning = true;
+        waitingForCardToClear = false;
+        lastAcceptedPayload = "";
+        nextScan = Time.time + 0.1f;
+
+        if (restartCoroutine != null)
+        {
+            StopCoroutine(restartCoroutine);
+            restartCoroutine = null;
+        }
+
+        if (statusText)
+            statusText.text = "Scanner reset. Scan a QR card.";
+
+        Debug.Log("[QRScanner] Force reset scanner.");
     }
 
     void OnDestroy()
     {
         if (scratchTex != null)
             Destroy(scratchTex);
+
+        if (restartCoroutine != null)
+        {
+            StopCoroutine(restartCoroutine);
+            restartCoroutine = null;
+        }
     }
 
 #if UNITY_EDITOR

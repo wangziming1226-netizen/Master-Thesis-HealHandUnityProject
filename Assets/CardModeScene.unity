@@ -119,61 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &9875922
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9875924}
-  - component: {fileID: 9875925}
-  m_Layer: 0
-  m_Name: QRSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9875924
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9875922}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9875925
+--- !u!114 &9875925 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5525920123126769881, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+  m_PrefabInstance: {fileID: 219430215795392704}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9875922}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e20b7f541e5240a9a1697604c7ef6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preview: {fileID: 1229135959}
-  fitter: {fileID: 1229135961}
-  statusText: {fileID: 1510630205}
-  scanInterval: 0.3
-  openUrlIfLink: 1
-  autoRestartOnTap: 1
-  beep: {fileID: 8300000, guid: df8ae42ad648c45359c607bd813a13f2, type: 3}
-  onDecoded:
-    m_PersistentCalls:
-      m_Calls: []
-  cameraTap: {fileID: 1229135964}
 --- !u!1 &102363099
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,7 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scanner: {fileID: 9875925}
-  recognizer: {fileID: 1762777083}
+  recognizer: {fileID: 1629315113}
   guide: {fileID: 622005000}
   visualGuide: {fileID: 0}
   stateManager: {fileID: 0}
@@ -792,7 +748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linker: {fileID: 207955925}
-  judge: {fileID: 1762777086}
+  judge: {fileID: 1629315112}
   autosaveEachSuccess: 1
   filePrefix: handrehab
 --- !u!4 &341555646
@@ -1182,6 +1138,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830603073}
   m_CullTransparentMesh: 1
+--- !u!1 &867159391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 867159393}
+  - component: {fileID: 867159392}
+  m_Layer: 0
+  m_Name: Solution
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &867159392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867159391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f2fd61d43b483ba93442eb6cfc37cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bootstrapPrefab: {fileID: 968918444066301895, guid: 1146a9de09159a948b683e94fb3d3c95, type: 3}
+  screen: {fileID: 1006057043}
+  runningMode: 0
+  _handLandmarkerResultAnnotationController: {fileID: 1006057044}
+  OnHandLandmarksOutput:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &867159393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867159391}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1006057040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1364,61 +1371,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   annotation: {fileID: 227034123}
   _visualizeZ: 0
---- !u!1 &1064799459
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1064799461}
-  - component: {fileID: 1064799468}
-  m_Layer: 0
-  m_Name: Solution
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1064799461
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064799459}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1064799468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064799459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20f2fd61d43b483ba93442eb6cfc37cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bootstrapPrefab: {fileID: 968918444066301895, guid: 1146a9de09159a948b683e94fb3d3c95, type: 3}
-  screen: {fileID: 1006057043}
-  runningMode: 0
-  _handLandmarkerResultAnnotationController: {fileID: 1006057044}
-  OnHandLandmarksOutput:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1140851538 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3259285889726014651, guid: 5713b959e3c77a58fb258133fc8e4aef, type: 3}
@@ -1492,7 +1444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7072856415794b148aaaf2cfa0a0b26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recognizer: {fileID: 1762777083}
+  recognizer: {fileID: 1629315113}
   useHandCenter: 1
   blurRadius: 8
   focusRadius: 0.25
@@ -2036,10 +1988,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a47982b257a0420692b85bd7502fe62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judge: {fileID: 1762777086}
+  judge: {fileID: 0}
   qrScanner: {fileID: 9875925}
-  recognizer: {fileID: 1762777083}
-  handRunner: {fileID: 1064799468}
+  recognizer: {fileID: 1629315113}
+  handRunner: {fileID: 867159392}
   statusText: {fileID: 1510630205}
   countDownText: {fileID: 1484197885}
   logger: {fileID: 341555645}
@@ -2071,6 +2023,270 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1629315111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1629315114}
+  - component: {fileID: 1629315113}
+  - component: {fileID: 1629315112}
+  - component: {fileID: 1629315115}
+  m_Layer: 0
+  m_Name: GestureRecognizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1629315112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629315111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dab43633bdf44198a106cb1d1d027c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recognizer: {fileID: 0}
+  targetGesture: open
+  requiredHold: 0.5
+  requireScan: 1
+  onSuccess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1510630205}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1969388819}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: df8ae42ad648c45359c607bd813a13f2, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 341555645}
+        m_TargetAssemblyTypeName: SessionLogger, Assembly-CSharp
+        m_MethodName: MarkSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 207955925}
+        m_TargetAssemblyTypeName: QRToGestureLinker, Assembly-CSharp
+        m_MethodName: OnTaskSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1554037858}
+        m_TargetAssemblyTypeName: BlockStateManager, Assembly-CSharp
+        m_MethodName: OnTaskSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 622005000}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success! Scan next card
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2025592159}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success! Scan next card
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 207955925}
+        m_TargetAssemblyTypeName: QRToGestureLinker, Assembly-CSharp
+        m_MethodName: OnTaskSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Success! Scan next card
+          m_BoolArgument: 0
+        m_CallState: 2
+  onProgress:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2025592161}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_fillAmount
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2025592159}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+--- !u!114 &1629315113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629315111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a26d6614ea2c45d9b84f47f1a4738cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusText: {fileID: 1510630205}
+  OnOpenHand:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1629315112}
+        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
+        m_MethodName: OnOpen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnFist:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1629315112}
+        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
+        m_MethodName: OnFist
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnOK:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1629315112}
+        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
+        m_MethodName: OnOK
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnThumbsUp:
+    m_PersistentCalls:
+      m_Calls: []
+  okTipDist: 0.08
+  fistAvgCurl: 0.18
+  openAvgSpread: 0.22
+  showRawLabel: 0
+  enableGate: 1
+  gateGesture: 0
+  requiredStableFrames: 5
+  smoothFactor: 0.3
+  pushToGlobalState: 1
+  debugFeed: 0
+  debugPush: 0
+  debugClassify: 0
+--- !u!4 &1629315114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629315111}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1629315115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629315111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d84affe790214edb9161bc8c1cfde3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runner: {fileID: 867159392}
+  recognizer: {fileID: 1629315113}
+  landmarkCache: {fileID: 0}
 --- !u!1 &1675171541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,262 +2499,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749631257}
   m_CullTransparentMesh: 1
---- !u!1 &1762777082
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1762777084}
-  - component: {fileID: 1762777083}
-  - component: {fileID: 1762777085}
-  - component: {fileID: 1762777086}
-  m_Layer: 0
-  m_Name: GestureRecognizer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1762777083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762777082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a26d6614ea2c45d9b84f47f1a4738cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statusText: {fileID: 1510630205}
-  OnOpenHand:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1762777086}
-        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
-        m_MethodName: OnOpen
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: open hand
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnFist:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1762777086}
-        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
-        m_MethodName: OnFist
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Fist
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnOK:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1762777086}
-        m_TargetAssemblyTypeName: GestureJudge, Assembly-CSharp
-        m_MethodName: OnOK
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: OK
-          m_BoolArgument: 0
-        m_CallState: 2
-  okTipDist: 0.08
-  fistAvgCurl: 0.18
-  openAvgSpread: 0.22
-  showRawLabel: 0
-  enableGate: 1
-  gateGesture: 0
-  requiredStableFrames: 5
-  smoothFactor: 0.3
---- !u!4 &1762777084
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762777082}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1762777085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762777082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d84affe790214edb9161bc8c1cfde3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runner: {fileID: 1064799468}
-  recognizer: {fileID: 1762777083}
---- !u!114 &1762777086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762777082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dab43633bdf44198a106cb1d1d027c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recognizer: {fileID: 0}
-  targetGesture: open
-  requiredHold: 0.5
-  requireScan: 1
-  onSuccess:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1510630205}
-        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
-        m_MethodName: SetText
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1969388819}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: PlayOneShot
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: df8ae42ad648c45359c607bd813a13f2, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 341555645}
-        m_TargetAssemblyTypeName: SessionLogger, Assembly-CSharp
-        m_MethodName: MarkSuccess
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 207955925}
-        m_TargetAssemblyTypeName: QRToGestureLinker, Assembly-CSharp
-        m_MethodName: OnTaskSuccess
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1554037858}
-        m_TargetAssemblyTypeName: BlockStateManager, Assembly-CSharp
-        m_MethodName: OnTaskSuccess
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 622005000}
-        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
-        m_MethodName: SetText
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success! Scan next card.
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2025592159}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success! Scan next card.
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 207955925}
-        m_TargetAssemblyTypeName: QRToGestureLinker, Assembly-CSharp
-        m_MethodName: OnTaskSuccess
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Success! Scan next card.
-          m_BoolArgument: 0
-        m_CallState: 2
-  onProgress:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2025592161}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
-        m_MethodName: set_fillAmount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2025592159}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Hold...
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!1 &1778753555
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,6 +3277,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091695896}
   m_CullTransparentMesh: 1
+--- !u!1001 &219430215795392704
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5525920123126769881, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: fitter
+      value: 
+      objectReference: {fileID: 1229135961}
+    - target: {fileID: 5525920123126769881, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: preview
+      value: 
+      objectReference: {fileID: 1229135959}
+    - target: {fileID: 5525920123126769881, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: cameraTap
+      value: 
+      objectReference: {fileID: 1229135964}
+    - target: {fileID: 5525920123126769881, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: statusText
+      value: 
+      objectReference: {fileID: 1510630205}
+    - target: {fileID: 5628289732778454393, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_Name
+      value: QRSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717865393565574525, guid: db483ec93d7e44039820345ba71f831d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: db483ec93d7e44039820345ba71f831d, type: 3}
 --- !u!1001 &8571076842648159877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3488,7 +3521,7 @@ PrefabInstance:
     - target: {fileID: 8571076843237194833, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
       propertyPath: _baseRunner
       value: 
-      objectReference: {fileID: 1064799468}
+      objectReference: {fileID: 0}
     - target: {fileID: 8571076843980202029, guid: 140d1d2c406167c50819d89f86d9092e, type: 3}
       propertyPath: contents
       value: 
@@ -3557,9 +3590,9 @@ SceneRoots:
   - {fileID: 1806680261}
   - {fileID: 8571076842648159877}
   - {fileID: 420786856}
-  - {fileID: 1064799461}
-  - {fileID: 1762777084}
-  - {fileID: 9875924}
+  - {fileID: 867159393}
+  - {fileID: 1629315114}
+  - {fileID: 219430215795392704}
   - {fileID: 207955926}
   - {fileID: 341555646}
   - {fileID: 1554037859}

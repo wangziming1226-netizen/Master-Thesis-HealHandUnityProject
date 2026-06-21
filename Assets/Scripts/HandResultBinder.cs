@@ -9,24 +9,30 @@ using Mediapipe.Tasks.Components.Containers;
 
 public class HandResultBinder : MonoBehaviour
 {
-    [Header("Source (Solution 上的 Runner)")]
+    [Header("Source (Runner on Solution)")]
     public HandLandmarkerRunner runner;
 
-    [Header("Target (GestureRecognizer 上的脚本)")]
+    [Header("Target (Script on GestureRecognizer)")]
     public HandGestureRecognizer recognizer;
 
-    // --- 主线程派发用 ---
+    [Header("Optional Continuous Rig Target")]
+    public HandLandmarkCache landmarkCache;
+
+    // Used for main-thread dispatch.
     private readonly object _lockObj = new object();
-    private Vector2[] _pendingPts;   // 等待在主线程喂给 recognizer 的结果
+
+    private Vector2[] _pendingPts2D;   // Used by the recogniser.
+    private Vector3[] _pendingPts3D;   // Used for continuous rig driving.
     private bool _hasPending;
 
     void OnEnable()
     {
         if (!runner) runner = FindFirstObjectByType<HandLandmarkerRunner>(FindObjectsInactive.Include);
         if (!recognizer) recognizer = FindFirstObjectByType<HandGestureRecognizer>(FindObjectsInactive.Include);
+        if (!landmarkCache) landmarkCache = FindFirstObjectByType<HandLandmarkCache>(FindObjectsInactive.Include);
 
-        if (runner != null) runner.OnResults += HandleResults;   // 回调（可能在子线程）
-        else Debug.LogWarning("[Binder] 找不到 HandLandmarkerRunner（Solution 上的 Runner）");
+        if (runner != null) runner.OnResults += HandleResults;
+        else Debug.LogWarning("[Binder] HandLandmarkerRunner was not found.");
     }
 
     void OnDisable()
@@ -34,42 +40,58 @@ public class HandResultBinder : MonoBehaviour
         if (runner != null) runner.OnResults -= HandleResults;
     }
 
-    // ↓ 这个函数可能不在主线程里被调用！不要直接触碰任何 Unity 对象（Text、GameObject、isActiveAndEnabled 等）
+    // This may run on a worker thread. Do not access Unity UI or GameObject state here.
     private void HandleResults(HandLandmarkerResult result)
     {
-        // 只做“数据转换”，不要访问 Unity 组件
-        var pts = BuildPoints(result);   // null 表示没有手
+        var pts2D = BuildPoints2D(result);   // Used by the recogniser.
+        var pts3D = BuildPoints3D(result);   // Used for continuous rig driving.
 
         lock (_lockObj)
         {
-            _pendingPts = pts;   // 覆盖成最新一帧（防堆积）
+            _pendingPts2D = pts2D;
+            _pendingPts3D = pts3D;
             _hasPending = true;
         }
     }
 
-    // 主线程：把 pending 的结果喂给 recognizer（这里才可以安全地改 UI）
+    // Feed the recogniser and landmark cache on the main thread.
     void Update()
     {
         if (!_hasPending) return;
 
-        Vector2[] pts = null;
+        Vector2[] pts2D = null;
+        Vector3[] pts3D = null;
+
         lock (_lockObj)
         {
             if (_hasPending)
             {
-                pts = _pendingPts;
-                _pendingPts = null;
+                pts2D = _pendingPts2D;
+                pts3D = _pendingPts3D;
+                _pendingPts2D = null;
+                _pendingPts3D = null;
                 _hasPending = false;
             }
         }
 
-        if (!recognizer) return;
-        // recognizer.Feed() 里可以改 TMP 文本、触发 UnityEvent 等
-        recognizer.Feed(pts);
+        if (recognizer != null)
+        {
+            recognizer.Feed(pts2D);
+        }
+
+        if (landmarkCache != null)
+        {
+            if (pts3D != null && pts3D.Length >= 21)
+                landmarkCache.SetLandmarks(pts3D, true);
+            else
+                landmarkCache.MarkTrackingLost();
+        }
     }
 
-    // 把 HandLandmarkerResult 解析成 Vector2[]（屏幕归一化 0-1）
-    private Vector2[] BuildPoints(HandLandmarkerResult result)
+    // -----------------------------
+    // 2D points: retained for the existing recogniser.
+    // -----------------------------
+    private Vector2[] BuildPoints2D(HandLandmarkerResult result)
     {
         if (ReferenceEquals(result, null)) return null;
 
@@ -77,7 +99,7 @@ public class HandResultBinder : MonoBehaviour
         if (allHands == null || allHands.Count == 0 || allHands[0] == null || allHands[0].Count == 0)
         {
             if (!string.IsNullOrEmpty(debugNote))
-                Debug.Log($"[Binder] 没拿到 landmarks。{debugNote}");
+                Debug.Log($"[Binder] No landmarks received. {debugNote}");
             return null;
         }
 
@@ -88,7 +110,7 @@ public class HandResultBinder : MonoBehaviour
         for (int i = 0; i < n; i++)
         {
             var lm = first[i];
-            if (TryGetXY(lm, out float x, out float y))
+            if (TryGetXYZ(lm, out float x, out float y, out float z))
                 pts[i] = new Vector2(x, y);
             else
                 pts[i] = Vector2.zero;
@@ -96,7 +118,45 @@ public class HandResultBinder : MonoBehaviour
         return pts;
     }
 
-    // 兼容不同版本的 result，尽量把它还原成 IList<IList<NormalizedLandmark>>
+    // -----------------------------
+    // 3D points: used for the continuous rig.
+    // The coordinates remain normalised and are not converted to world space.
+    // x: 0~1, y: 0~1, z: relative depth
+    // -----------------------------
+    private Vector3[] BuildPoints3D(HandLandmarkerResult result)
+    {
+        if (ReferenceEquals(result, null)) return null;
+
+        var allHands = TryGetLandmarks(result, out _);
+        if (allHands == null || allHands.Count == 0 || allHands[0] == null || allHands[0].Count == 0)
+            return null;
+
+        var first = allHands[0];
+        int n = Math.Min(21, first.Count);
+        var pts = new Vector3[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            var lm = first[i];
+            if (TryGetXYZ(lm, out float x, out float y, out float z))
+            {
+                // Centre x, flip y upward, and invert z for a more intuitive forward/inward direction.
+                pts[i] = new Vector3(
+                    x - 0.5f,
+                    -(y - 0.5f),
+                    -z
+                );
+            }
+            else
+            {
+                pts[i] = Vector3.zero;
+            }
+        }
+
+        return pts;
+    }
+
+    // Supports different result versions and attempts to restore the data as IList<IList<NormalizedLandmark>>.
     private IList<IList<NormalizedLandmark>> TryGetLandmarks(HandLandmarkerResult result, out string debugNote)
     {
         debugNote = null;
@@ -116,7 +176,7 @@ public class HandResultBinder : MonoBehaviour
         {
             var props = t.GetProperties().Select(p => p.Name);
             var fields = t.GetFields().Select(f => f.Name);
-            debugNote = $"可用属性: [{string.Join(", ", props)}]；可用字段: [{string.Join(", ", fields)}]";
+            debugNote = $"Available properties: [{string.Join(", ", props)}]; available fields: [{string.Join(", ", fields)}]";
 
             foreach (var p in t.GetProperties())
                 if (TryUnwrap(p.GetValue(result), out var list)) return list;
@@ -128,11 +188,10 @@ public class HandResultBinder : MonoBehaviour
 
         if (TryUnwrap(value, out var unwrapped)) return unwrapped;
 
-        debugNote = $"拿到的 {value.GetType().Name} 不是 landmarks 列表";
+        debugNote = $"The received {value.GetType().Name} is not a landmark list.";
         return null;
     }
 
-    // 尝试把各种包装类型拆成 IList<IList<NormalizedLandmark>>
     private bool TryUnwrap(object obj, out IList<IList<NormalizedLandmark>> result)
     {
         result = null;
@@ -140,7 +199,8 @@ public class HandResultBinder : MonoBehaviour
 
         if (obj is IList<IList<NormalizedLandmark>> direct)
         {
-            result = direct; return true;
+            result = direct;
+            return true;
         }
 
         if (obj is System.Collections.IList outer && outer.Count > 0)
@@ -165,34 +225,44 @@ public class HandResultBinder : MonoBehaviour
                 else if (inner is System.Collections.IList asIList && asIList.Count > 0 && asIList[0] is NormalizedLandmark)
                     list.Add(asIList.Cast<NormalizedLandmark>().ToList());
             }
-            if (list.Count > 0) { result = list; return true; }
+            if (list.Count > 0)
+            {
+                result = list;
+                return true;
+            }
         }
 
         return false;
     }
 
-    private bool TryGetXY(NormalizedLandmark lm, out float x, out float y)
+    private bool TryGetXYZ(NormalizedLandmark lm, out float x, out float y, out float z)
     {
-        x = y = 0f;
+        x = y = z = 0f;
         if (lm == null) return false;
 
         var t = lm.GetType();
 
         var px = t.GetProperty("X") ?? t.GetProperty("x");
         var py = t.GetProperty("Y") ?? t.GetProperty("y");
+        var pz = t.GetProperty("Z") ?? t.GetProperty("z");
+
         if (px != null && py != null)
         {
             x = Convert.ToSingle(px.GetValue(lm));
             y = Convert.ToSingle(py.GetValue(lm));
+            if (pz != null) z = Convert.ToSingle(pz.GetValue(lm));
             return true;
         }
 
         var fx = t.GetField("X") ?? t.GetField("x");
         var fy = t.GetField("Y") ?? t.GetField("y");
+        var fz = t.GetField("Z") ?? t.GetField("z");
+
         if (fx != null && fy != null)
         {
             x = Convert.ToSingle(fx.GetValue(lm));
             y = Convert.ToSingle(fy.GetValue(lm));
+            if (fz != null) z = Convert.ToSingle(fz.GetValue(lm));
             return true;
         }
 
