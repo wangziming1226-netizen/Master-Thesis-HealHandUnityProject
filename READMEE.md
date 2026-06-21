@@ -193,31 +193,69 @@ cd Master-Thesis-HealHandUnityProject
 4. Open the project using Unity 6000.0.58f1 (Unity 6). Using a different Unity version may trigger package, scene, or project-setting upgrades.
 5. Allow Unity to restore the dependencies defined in `Packages/manifest.json`.
 
-### 3. Run in the Unity Editor
+### 3. Open the main scene
 
-1. Open the main project scene from Unity Build Settings or from:
+The main thesis prototype entry scene is:
+
+```text
+ThesisHub
+```
+
+Open `ThesisHub` from:
 
 ```text
 Assets/ASET/_MyGameScenes/
 ```
 
-2. Confirm that MediaPipe hand tracking is available.
-3. Confirm that camera access is enabled.
-4. Press **Play** in the Unity Editor.
-5. Select one of the available modules: Practice, Assessment, Daily, or Story.
+`ThesisHub` is the host scene for the user-facing interface. The tracking services are loaded through the project workflow, so the tracking scene normally does not need to be opened and run manually as a separate entry scene.
 
-### 4. Build for iPad
+Before running or building, confirm that `ThesisHub` is included in **Scenes In Build** and appears first in the build order.
+
+### 4. Run the thesis prototype in the Unity Editor
+
+1. Open `ThesisHub`.
+2. Confirm that the camera is available and that MediaPipe hand tracking is configured.
+3. Press **Play** in the Unity Editor.
+4. Allow camera access when requested.
+5. Wait for the home screen and the rigged hand/avatar view to appear.
+6. Move one hand in front of the camera and confirm that the avatar follows the hand.
+
+From the home screen, select one of the available modules:
+
+- **Practice** — the main formal module for fixed-versus-adaptive task evaluation.
+- **Assessment** — a structured supporting task flow for repeatable assessment-oriented trials.
+- **Daily** — a lighter routine-based practice flow.
+- **Story** — a lightweight recreational interaction mode.
+
+### 5. Basic interaction flow
+
+For the main thesis workflow, use the following sequence:
+
+1. Start from `ThesisHub`.
+2. Select **Practice**.
+3. Select **Fixed** or **Adaptive** mode.
+4. When prompted, scan a supported QR card to set the target gesture and initial task parameters.
+5. Follow the displayed target gesture with your hand.
+6. Keep the gesture stable for the required hold duration.
+7. Review the task feedback, including success status, score, completion time, and tracking-related information.
+8. Continue with the next task or return to the home screen.
+
+The main formal evaluation focuses on Practice. Assessment and Daily are supplementary modules, while Story is a lightweight extension and is not part of the main fixed-versus-adaptive comparison.
+
+### 6. Build for iPad
 
 1. In Unity, open **File → Build Settings**.
 2. Select **iOS**.
 3. Click **Switch Platform**.
-4. Confirm that the intended main scene is included in **Scenes In Build**.
+4. Confirm that `ThesisHub` is included in **Scenes In Build** and is first in the list.
 5. Click **Build**.
 6. Open the generated Xcode project.
 7. Configure signing for the target iPad.
-8. Deploy the project to the device.
+8. Confirm that the iOS camera usage description is present in the generated project settings.
+9. Deploy the project to the iPad.
+10. On first launch, allow camera permission.
 
-For iPad testing, camera permission must be enabled and the device should be used under stable lighting conditions.
+For iPad testing, use stable lighting and keep one hand clearly within the front-camera view. The avatar mapping may need the Inspector calibration described later in this README.
 
 ---
 
