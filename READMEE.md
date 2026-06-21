@@ -161,7 +161,7 @@ gesture confidence values
 
 The project was developed and tested with:
 
-- Unity 6.x
+- Unity 6000.0.58f1 (Unity 6)
 - Universal Render Pipeline (URP)
 - MediaPipe Hands Unity integration
 - macOS and Xcode for iOS/iPadOS builds
@@ -190,7 +190,7 @@ cd Master-Thesis-HealHandUnityProject
 1. Open Unity Hub.
 2. Select **Add**.
 3. Choose the project root folder.
-4. Open the project using a compatible Unity 6.x version.
+4. Open the project using Unity 6000.0.58f1 (Unity 6). Using a different Unity version may trigger package, scene, or project-setting upgrades.
 5. Allow Unity to restore the dependencies defined in `Packages/manifest.json`.
 
 ### 3. Run in the Unity Editor
@@ -251,6 +251,18 @@ Assets/Thesis/
 Assets/ASET/_MyGameScenes/
 Assets/ASET/_Script/
 ```
+
+## Thesis Materials
+
+The core MSc thesis-specific content is organised under:
+
+```text
+Assets/Thesis/
+```
+
+This is the main starting point for reviewing the thesis implementation. It contains the thesis-oriented project materials, including the core prototype configuration, module-specific resources, supporting documentation, implementation notes, and other assets used by the current HealHand thesis prototype.
+
+The broader Unity project also contains shared scripts, MediaPipe integration, scenes, and legacy prototype components outside this folder. However, readers who want to understand the thesis-specific work should begin with `Assets/Thesis/`.
 
 ---
 
